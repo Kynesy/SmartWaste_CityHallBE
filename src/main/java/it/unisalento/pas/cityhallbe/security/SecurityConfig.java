@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -21,7 +22,8 @@ public class SecurityConfig {
         http.cors(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers(HttpMethod.GET, "/api/user/createUser").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/home").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/user/createUser").hasAuthority("USER")
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(
                         jwt -> jwt.jwtAuthenticationConverter(jwtTokenConverter)
@@ -31,9 +33,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtDecoder jwtDecoder() {
-        String issuerUri = "https://smart-city-waste-management.eu.auth0.com/.well-known/jwks.json";
+    JwtDecoder jwtDecoder() {
+        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation("https://smart-city-waste-management.eu.auth0.com/");
 
-        return NimbusJwtDecoder.withJwkSetUri(issuerUri).build();
+        OAuth2TokenValidator<Jwt> tokenValidator = new JwtTokenValidator();
+
+        jwtDecoder.setJwtValidator(tokenValidator);
+
+        return jwtDecoder;
     }
 }
