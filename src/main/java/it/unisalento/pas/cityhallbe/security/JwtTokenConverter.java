@@ -16,10 +16,8 @@ public class JwtTokenConverter implements Converter<Jwt, AbstractAuthenticationT
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
-        // Extract the role from the JWT claims
         Collection<GrantedAuthority> authorities = extractRole(jwt.getClaims());
 
-        // Create a JwtAuthenticationToken with the extracted role
         return new JwtAuthenticationToken(jwt, authorities);
     }
 
@@ -30,7 +28,7 @@ public class JwtTokenConverter implements Converter<Jwt, AbstractAuthenticationT
             String role = (String) claims.get(CLAIM_ROLE);
             authorities.add(new SimpleGrantedAuthority(role));
         }
-        System.out.println(authorities);
+
         return authorities;
     }
 }
