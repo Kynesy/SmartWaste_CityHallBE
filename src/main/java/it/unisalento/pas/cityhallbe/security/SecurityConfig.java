@@ -29,6 +29,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         //only authorized can get api
         http.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                        .requestMatchers(HttpMethod.GET, "/home").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/user/create").hasAuthority("ADMIN")
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(

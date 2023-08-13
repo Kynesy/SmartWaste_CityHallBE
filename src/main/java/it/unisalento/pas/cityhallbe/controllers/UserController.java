@@ -1,56 +1,96 @@
 package it.unisalento.pas.cityhallbe.controllers;
 
+import it.unisalento.pas.cityhallbe.domains.User;
+import it.unisalento.pas.cityhallbe.dto.UserDTO;
+import it.unisalento.pas.cityhallbe.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController  // Use @RestController instead of @Controller to simplify JSON responses
+@RestController
 @RequestMapping("/api/user")
 public class UserController {
+
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("/exist/{userID}")
     public ResponseEntity<Boolean> existUser(@PathVariable String userID) {
-        // Perform the logic to check if the user with the given userID exists
-        // Replace this with your actual logic to check user existence
-
-        boolean userExists = /* Perform the check based on userID */ true; // Replace this
-
+        boolean userExists = userService.existUser(userID) == 1;
         return ResponseEntity.status(HttpStatus.OK).body(userExists);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createUser(@RequestBody String user) {
-        // Perform the logic to create the user based on the given User object
-        // Replace this with your actual logic to create a user
+    public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO) {
+        User user = fromUserDTOtoUser(userDTO);
 
-        System.out.println("User created: " + user);
-
-        // Return a response indicating success
-        String jsonResponse = "{\"message\": \"User created successfully\"}";
-        return ResponseEntity.status(HttpStatus.OK).body(jsonResponse);
+        int result = userService.createUser(user);
+        if (result == 1) {
+            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"User created successfully\"}");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"User creation failed\"}");
+        }
     }
 
     @PostMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody String user) {
-        // Perform the logic to update the user based on the given User object
-        // Replace this with your actual logic to update a user
+    public ResponseEntity<String> updateUser(@RequestBody UserDTO userDTO) {
+        User user = fromUserDTOtoUser(userDTO);
 
-        System.out.println("User updated: " + user);
-
-        // Return a response indicating success
-        String jsonResponse = "{\"message\": \"User updated successfully\"}";
-        return ResponseEntity.status(HttpStatus.OK).body(jsonResponse);
+        int result = userService.updateUser(user);
+        if (result == 1) {
+            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"User updated successfully\"}");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"User update failed\"}");
+        }
     }
 
     @DeleteMapping("/delete/{userID}")
     public ResponseEntity<String> deleteUser(@PathVariable String userID) {
-        // Perform the logic to delete the user with the given userID
-        // Replace this with your actual logic to delete a user
-
-        System.out.println("User with ID " + userID + " deleted");
-
-        // Return a response indicating success
-        String jsonResponse = "{\"message\": \"User deleted successfully\"}";
-        return ResponseEntity.status(HttpStatus.OK).body(jsonResponse);
+        int result = userService.deleteUser(userID);
+        if (result == 1) {
+            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"User deleted successfully\"}");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"User deletion failed\"}");
+        }
     }
 
+    @GetMapping("/get/{userID}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable String userID) {
+        User user = userService.findByID(userID);
+
+        if (user != null) {
+            UserDTO userDTO = fromUserToUserDTO(user);
+            return ResponseEntity.ok(userDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // MAPPING
+    private User fromUserDTOtoUser(UserDTO userDTO) {
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setName(userDTO.getName());
+        user.setSurname(userDTO.getSurname());
+        user.setEmail(userDTO.getEmail());
+        user.setBdate(userDTO.getBdate());
+
+        return user;
+    }
+
+    private UserDTO fromUserToUserDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setName(user.getName());
+        userDTO.setSurname(user.getSurname());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setBdate(user.getBdate());
+
+        return userDTO;
+    }
 }
