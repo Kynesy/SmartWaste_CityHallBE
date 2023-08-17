@@ -28,7 +28,13 @@ public class JwtTokenValidator implements OAuth2TokenValidator<Jwt> {
 
     private boolean isValidIssuer(Jwt jwt) {
         String tokenIssuer = String.valueOf(jwt.getIssuer());
-        String expectedIssuer = "https://smart-city-waste-management.eu.auth0.com/";
-        return expectedIssuer.equals(tokenIssuer);
+        String[] expectedIssuer = SecurityConstants.ISSUER_LIST;
+        for (String issuer : expectedIssuer) {
+            if (issuer.equals(tokenIssuer)) {
+                return true; // Found a matching issuer in the list
+            }
+        }
+
+        return false; // No matching issuer found
     }
 }

@@ -21,8 +21,11 @@ public class UserController {
 
     @GetMapping("/exist/{userID}")
     public ResponseEntity<Boolean> existUser(@PathVariable String userID) {
-        boolean userExists = userService.existUser(userID) == 1;
-        return ResponseEntity.status(HttpStatus.OK).body(userExists);
+        if(userService.existUser(userID)==1){
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+        }
     }
 
     @PostMapping("/create")
@@ -40,7 +43,6 @@ public class UserController {
     @PostMapping("/update")
     public ResponseEntity<String> updateUser(@RequestBody UserDTO userDTO) {
         User user = fromUserDTOtoUser(userDTO);
-
         int result = userService.updateUser(user);
         if (result == 1) {
             return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"User updated successfully\"}");
@@ -85,7 +87,7 @@ public class UserController {
 
     private UserDTO fromUserToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
+        userDTO.setId(""); //non voglio che l'id del database esca da qui
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
         userDTO.setEmail(user.getEmail());

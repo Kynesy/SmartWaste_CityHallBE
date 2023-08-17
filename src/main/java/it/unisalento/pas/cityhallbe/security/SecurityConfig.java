@@ -29,8 +29,12 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         //only authorized can get api
         http.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers(HttpMethod.GET, "/home").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/user/create").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/user/exist/{userID}").hasAnyAuthority(SecurityConstants.USER_ROLE_ID, SecurityConstants.ADMIN_ROLE_ID)
+                        .requestMatchers(HttpMethod.POST, "/api/user/create").hasAnyAuthority(SecurityConstants.USER_ROLE_ID, SecurityConstants.ADMIN_ROLE_ID)
+                        .requestMatchers(HttpMethod.POST, "/api/user/update").hasAnyAuthority(SecurityConstants.USER_ROLE_ID, SecurityConstants.ADMIN_ROLE_ID)
+                        .requestMatchers(HttpMethod.DELETE, "/api/user/delete/{userID}").hasAnyAuthority(SecurityConstants.USER_ROLE_ID, SecurityConstants.ADMIN_ROLE_ID)
+                        .requestMatchers(HttpMethod.GET, "/api/user/get/{userID}").hasAnyAuthority(SecurityConstants.USER_ROLE_ID, SecurityConstants.ADMIN_ROLE_ID)
+
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(
                         jwt -> jwt.jwtAuthenticationConverter(jwtTokenConverter)
@@ -54,7 +58,7 @@ public class SecurityConfig {
 
     @Bean
     JwtDecoder jwtDecoder() {
-        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation("https://smart-city-waste-management.eu.auth0.com/");
+        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation(SecurityConstants.ISSUER_LIST[0]);
         OAuth2TokenValidator<Jwt> tokenValidator = new JwtTokenValidator();
         jwtDecoder.setJwtValidator(tokenValidator);
         return jwtDecoder;
