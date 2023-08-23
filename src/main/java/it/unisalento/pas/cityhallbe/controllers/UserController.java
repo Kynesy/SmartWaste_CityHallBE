@@ -87,7 +87,7 @@ public class UserController {
 
     private UserDTO fromUserToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(""); //non voglio che l'id del database esca da qui
+        userDTO.setId("");
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
         userDTO.setEmail(user.getEmail());
