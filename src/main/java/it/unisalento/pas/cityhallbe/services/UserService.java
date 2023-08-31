@@ -5,6 +5,8 @@ import it.unisalento.pas.cityhallbe.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -69,5 +71,18 @@ public class UserService implements IUserService {
             e.printStackTrace();
             return null; // Return null in case of failure
         }
+    }
+
+    @Override
+    public List<String> getAllId() {
+        List<User> userList = userRepository.findAll();
+        List<String> idList = new ArrayList<>();
+
+        for (User user:
+             userList) {
+            idList.add(user.getId());
+        }
+
+        return idList;
     }
 }
