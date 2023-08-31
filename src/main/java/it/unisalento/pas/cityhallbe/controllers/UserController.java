@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -71,6 +73,11 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/get/id/all")
+    public ResponseEntity<ArrayList<String>> getAllId(){
+        return ResponseEntity.ok(new ArrayList<>(userService.getAllId()));
     }
 
     // MAPPING
