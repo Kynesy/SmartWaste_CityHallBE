@@ -1,4 +1,4 @@
-package it.unisalento.pas.cityhallbe.security;
+package it.unisalento.pas.cityhallbe.configurations;
 
 public class SecurityConstants {
     public static final String[] ISSUER_LIST = {"https://smart-city-waste-management.eu.auth0.com/", "test"};

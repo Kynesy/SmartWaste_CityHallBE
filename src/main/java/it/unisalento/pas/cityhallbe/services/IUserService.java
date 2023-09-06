@@ -11,5 +11,5 @@ public interface IUserService {
     int deleteUser(String ID);
     int existUser(String email);
     User findByID(String ID);
-    List<String> getAllId();
+    List<String> getAllIdList();
 }

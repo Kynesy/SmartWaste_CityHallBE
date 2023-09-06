@@ -77,7 +77,7 @@ public class UserController {
 
     @GetMapping("/get/id/all")
     public ResponseEntity<ArrayList<String>> getAllId(){
-        return ResponseEntity.ok(new ArrayList<>(userService.getAllId()));
+        return ResponseEntity.ok(new ArrayList<>(userService.getAllIdList()));
     }
 
     // MAPPING
