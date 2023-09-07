@@ -113,7 +113,7 @@ public class UserController {
      *
      * @return Una risposta JSON contenente una lista di ID utente o uno stato 404 se la lista è vuota.
      */
-    @GetMapping("/get/id/all")
+    @GetMapping("/get/get/idList")
     public ResponseEntity<ArrayList<String>> getAllId() {
         return ResponseEntity.ok(new ArrayList<>(userService.getAllIdList()));
     }
