@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+/**
+ * Questa classe è un controller che gestisce le operazioni relative agli avvisi (warnings).
+ */
 @RestController
 @RequestMapping("/api/warning")
 public class WarningController {
@@ -19,43 +22,66 @@ public class WarningController {
         this.warningService = warningService;
     }
 
+    /**
+     * Crea un nuovo avviso (warning) utilizzando i dati forniti come corpo della richiesta.
+     *
+     * @param warningDTO I dati dell'avviso da creare.
+     * @return Una risposta JSON che indica se la creazione dell'avviso è avvenuta con successo o meno.
+     */
     @PostMapping("/create")
-    public ResponseEntity<String> createWarning(@RequestBody WarningDTO warningDTO){
+    public ResponseEntity<String> createWarning(@RequestBody WarningDTO warningDTO) {
         Warning warning = fromWarningDTOtoWarning(warningDTO);
 
-        if(warningService.createWarning(warning) == 0){
+        if (warningService.createWarning(warning) == 0) {
             return ResponseEntity.ok("{\"message\": \"Warning created\"}");
-        }else{
+        } else {
             return ResponseEntity.internalServerError().build();
         }
     }
 
+    /**
+     * Elimina un avviso (warning) in base all'ID specificato nella richiesta.
+     *
+     * @param warningId L'ID dell'avviso da eliminare.
+     * @return Una risposta JSON che indica se l'eliminazione dell'avviso è avvenuta con successo o meno.
+     */
     @DeleteMapping("/delete/{warningId}")
-    public ResponseEntity<String> deleteWarning(@PathVariable String warningId){
-        if(warningService.deleteWarning(warningId) == 0){
+    public ResponseEntity<String> deleteWarning(@PathVariable String warningId) {
+        if (warningService.deleteWarning(warningId) == 0) {
             return ResponseEntity.ok("{\"message\": \"Warning deleted\"}");
-        }else{
+        } else {
             return ResponseEntity.internalServerError().build();
         }
     }
 
+    /**
+     * Ottiene tutti gli avvisi (warnings) associati a un utente specifico in base all'ID utente.
+     *
+     * @param userId L'ID dell'utente di cui si desiderano gli avvisi.
+     * @return Una risposta JSON contenente una lista di avvisi (warnings) o uno stato 500 se si verifica un errore.
+     */
     @GetMapping("/get/user/{userId}")
-    public ResponseEntity<ArrayList<WarningDTO>> getAllUserWarning(@PathVariable String userId){
+    public ResponseEntity<ArrayList<WarningDTO>> getAllUserWarning(@PathVariable String userId) {
         ArrayList<WarningDTO> warningListDTO = new ArrayList<>();
         ArrayList<Warning> warningList = warningService.getAllByUser(userId);
 
-        if(warningList != null){
-            for (Warning warn :
-                    warningList) {
+        if (warningList != null) {
+            for (Warning warn : warningList) {
                 WarningDTO warnDTO = fromWarningToWarningDTO(warn);
                 warningListDTO.add(warnDTO);
             }
             return ResponseEntity.ok(warningListDTO);
-        }else{
+        } else {
             return ResponseEntity.internalServerError().build();
         }
     }
 
+    /**
+     * Converte un oggetto Warning in un oggetto WarningDTO.
+     *
+     * @param warn L'oggetto Warning da convertire.
+     * @return Un oggetto WarningDTO con i dati dal Warning.
+     */
     private WarningDTO fromWarningToWarningDTO(Warning warn) {
         WarningDTO warningDTO = new WarningDTO();
 
@@ -66,6 +92,12 @@ public class WarningController {
         return warningDTO;
     }
 
+    /**
+     * Converte un oggetto WarningDTO in un oggetto Warning.
+     *
+     * @param warningDTO L'oggetto WarningDTO da convertire.
+     * @return Un oggetto Warning con i dati dal WarningDTO.
+     */
     private Warning fromWarningDTOtoWarning(WarningDTO warningDTO) {
         Warning warning = new Warning();
 
