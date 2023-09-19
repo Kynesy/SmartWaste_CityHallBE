@@ -7,7 +7,7 @@ public class SecurityConstants {
     /**
      * Lista degli issuer (emittenti) attendibili per i token JWT.
      */
-    public static final String[] ISSUER_LIST = {"https://smart-city-waste-management.eu.auth0.com/", "test"};
+    public static final String[] ISSUER_LIST = {"https://smart-city-waste-management.eu.auth0.com/"};
 
     /**
      * Ruolo utente.
