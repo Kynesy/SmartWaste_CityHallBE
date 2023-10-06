@@ -14,5 +14,4 @@ test_procedure:
   stage: test
   image: gradle:jdk17
   script:
-    - cd CityHallBE
     - ./gradlew test
