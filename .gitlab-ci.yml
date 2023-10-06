@@ -1,0 +1,19 @@
+stages:
+  - build
+  - test
+
+build_procedure:
+  stage: build
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  script:
+    - cd CityHallBE
+    - docker compose build
+
+test_procedure:
+  stage: test
+  image: gradle:jdk17
+  script:
+    - cd CityHallBE
+    - ./gradlew test
