@@ -42,7 +42,7 @@ public class UserControllerTest {
 
     @Test
     void existUserTest_UserExists() throws Exception {
-        String userID = "123";
+        String userID = "mockID";
         when(userService.existUser(userID)).thenReturn(1);
 
         mockMvc.perform(get("/api/user/exist/{userID}", userID)
@@ -54,7 +54,7 @@ public class UserControllerTest {
 
     @Test
     void existUserTest_UserDoesNotExist() throws Exception {
-        String userID = "123";
+        String userID = "mockID";
         when(userService.existUser(userID)).thenReturn(0);
 
         mockMvc.perform(get("/api/user/exist/{userID}", userID)
@@ -66,7 +66,7 @@ public class UserControllerTest {
     @Test
     void createUserTest_Success() throws Exception {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId("123");
+        userDTO.setId("mockID");
         Gson gson = new Gson();
         String json = gson.toJson(userDTO);
 
@@ -83,7 +83,7 @@ public class UserControllerTest {
     @Test
     void createUserTest_Failure() throws Exception {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId("123");
+        userDTO.setId("mockID");
         Gson gson = new Gson();
         String json = gson.toJson(userDTO);
 
@@ -100,7 +100,7 @@ public class UserControllerTest {
     @Test
     void updateUserTest_Success() throws Exception {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId("123");
+        userDTO.setId("mockID");
         Gson gson = new Gson();
         String json = gson.toJson(userDTO);
 
@@ -117,7 +117,7 @@ public class UserControllerTest {
     @Test
     void updateUserTest_Failure() throws Exception {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId("123");
+        userDTO.setId("mockID");
         Gson gson = new Gson();
         String json = gson.toJson(userDTO);
 
@@ -133,7 +133,7 @@ public class UserControllerTest {
 
     @Test
     void deleteUserTest_Success() throws Exception {
-        String userID = "123";
+        String userID = "mockID";
         when(userService.deleteUser(userID)).thenReturn(1);
 
         mockMvc.perform(delete("/api/user/delete/{userID}", userID)
@@ -144,7 +144,7 @@ public class UserControllerTest {
 
     @Test
     void deleteUserTest_Failure() throws Exception {
-        String userID = "123";
+        String userID = "mockID";
         when(userService.deleteUser(userID)).thenReturn(0);
 
         mockMvc.perform(delete("/api/user/delete/{userID}", userID)
@@ -155,7 +155,7 @@ public class UserControllerTest {
 
     @Test
     void getUserTest_UserExists() throws Exception {
-        String userID = "123";
+        String userID = "mockID";
         User user = new User();
         user.setId(userID);
         when(userService.findByID(userID)).thenReturn(user);
@@ -167,7 +167,7 @@ public class UserControllerTest {
 
     @Test
     void getUserTest_UserDoesNotExist() throws Exception {
-        String userID = "123";
+        String userID = "mockID";
         when(userService.findByID(userID)).thenReturn(null);
 
         mockMvc.perform(get("/api/user/get/{userID}", userID)
@@ -178,12 +178,12 @@ public class UserControllerTest {
     @Test
     void getAllIdTest() throws Exception {
         ArrayList<String> userIdList = new ArrayList<>();
-        userIdList.add("123");
+        userIdList.add("mockID");
         when(userService.getAllIdList()).thenReturn(userIdList);
 
         mockMvc.perform(get("/api/user/id/all")
                         .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0]").value("123"));
+                .andExpect(jsonPath("$[0]").value("mockID"));
     }
 }
