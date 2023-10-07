@@ -3,6 +3,7 @@ package it.unisalento.pas.cityhallbe.controllersTest;
 import com.nimbusds.jose.shaded.gson.Gson;
 import it.unisalento.pas.cityhallbe.controllers.UserController;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,6 +31,7 @@ public class UserControllerTest {
     @InjectMocks
     private UserController userController;
 
+    @Autowired
     private final MockMvc mockMvc;
 
     public UserControllerTest() {
