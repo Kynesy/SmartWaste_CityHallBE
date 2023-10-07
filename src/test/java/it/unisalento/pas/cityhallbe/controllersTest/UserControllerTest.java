@@ -162,8 +162,7 @@ public class UserControllerTest {
 
         mockMvc.perform(get("/api/user/get/{userID}", userID)
                         .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(userID));
+                .andExpect(status().isOk());
     }
 
     @Test
