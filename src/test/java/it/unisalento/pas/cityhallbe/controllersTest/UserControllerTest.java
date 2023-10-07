@@ -35,10 +35,7 @@ public class UserControllerTest {
 
     @MockBean
     private UserService userService;
-
-    @MockBean
-    private IUserRepository userRepository;
-
+    
 
     @Test
     void existUserTest_UserExists() throws Exception {
