@@ -51,13 +51,14 @@ public class UserControllerTest {
                 .andExpect(content().string("true"));
     }
 
-    /*
+
     @Test
     void existUserTest_UserDoesNotExist() throws Exception {
         String userID = "123";
         when(userService.existUser(userID)).thenReturn(0);
 
-        mockMvc.perform(get("/api/user/exist/{userID}", userID))
+        mockMvc.perform(get("/api/user/exist/{userID}", userID)
+                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("false"));
     }
@@ -73,7 +74,8 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/user/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"message\": \"User created successfully\"}"));
     }
@@ -89,7 +91,8 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/user/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().json("{\"message\": \"User creation failed\"}"));
     }
@@ -105,7 +108,8 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/user/update")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"message\": \"User updated successfully\"}"));
     }
@@ -121,7 +125,8 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/user/update")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().json("{\"message\": \"User update failed\"}"));
     }
@@ -131,7 +136,8 @@ public class UserControllerTest {
         String userID = "123";
         when(userService.deleteUser(userID)).thenReturn(1);
 
-        mockMvc.perform(delete("/api/user/delete/{userID}", userID))
+        mockMvc.perform(delete("/api/user/delete/{userID}", userID)
+                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"message\": \"User deleted successfully\"}"));
     }
@@ -141,7 +147,8 @@ public class UserControllerTest {
         String userID = "123";
         when(userService.deleteUser(userID)).thenReturn(0);
 
-        mockMvc.perform(delete("/api/user/delete/{userID}", userID))
+        mockMvc.perform(delete("/api/user/delete/{userID}", userID)
+                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().json("{\"message\": \"User deletion failed\"}"));
     }
@@ -153,7 +160,8 @@ public class UserControllerTest {
         user.setId(userID);
         when(userService.findByID(userID)).thenReturn(user);
 
-        mockMvc.perform(get("/api/user/get/{userID}", userID))
+        mockMvc.perform(get("/api/user/get/{userID}", userID)
+                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(userID));
     }
@@ -163,7 +171,8 @@ public class UserControllerTest {
         String userID = "123";
         when(userService.findByID(userID)).thenReturn(null);
 
-        mockMvc.perform(get("/api/user/get/{userID}", userID))
+        mockMvc.perform(get("/api/user/get/{userID}", userID)
+                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
                 .andExpect(status().isNotFound());
     }
 
@@ -173,9 +182,9 @@ public class UserControllerTest {
         userIdList.add("123");
         when(userService.getAllIdList()).thenReturn(userIdList);
 
-        mockMvc.perform(get("/api/user/id/all"))
+        mockMvc.perform(get("/api/user/id/all")
+                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0]").value("123"));
     }
-     */
 }
