@@ -2,10 +2,12 @@ package it.unisalento.pas.cityhallbe.controllersTest;
 
 import com.nimbusds.jose.shaded.gson.Gson;
 import it.unisalento.pas.cityhallbe.controllers.UserController;
+import it.unisalento.pas.cityhallbe.repositories.IUserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -25,18 +27,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
     private UserService userService;
 
-    @InjectMocks
-    private UserController userController;
-
-    @Autowired
-    private final MockMvc mockMvc;
-
-    public UserControllerTest() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-    }
+    @MockBean
+    private IUserRepository userRepository;
 
     @Test
     void existUserTest_UserExists() throws Exception {
