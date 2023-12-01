@@ -1,7 +1,6 @@
 package it.unisalento.pas.cityhallbe.controllersTest;
 
 import com.nimbusds.jose.shaded.gson.Gson;
-import it.unisalento.pas.cityhallbe.configurations.SecurityConstants;
 import it.unisalento.pas.cityhallbe.domains.Warning;
 import it.unisalento.pas.cityhallbe.dto.WarningDTO;
 import it.unisalento.pas.cityhallbe.services.IWarningService;

@@ -1,9 +1,6 @@
 package it.unisalento.pas.cityhallbe.controllersTest;
 
 import com.nimbusds.jose.shaded.gson.Gson;
-import it.unisalento.pas.cityhallbe.configurations.SecurityConstants;
-import it.unisalento.pas.cityhallbe.controllers.UserController;
-import it.unisalento.pas.cityhallbe.repositories.IUserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,10 +13,7 @@ import java.util.ArrayList;
 import it.unisalento.pas.cityhallbe.domains.User;
 import it.unisalento.pas.cityhallbe.dto.UserDTO;
 import it.unisalento.pas.cityhallbe.services.UserService;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.mockito.Mockito.*;
