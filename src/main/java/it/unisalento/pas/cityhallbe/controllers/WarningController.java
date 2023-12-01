@@ -5,6 +5,7 @@ import it.unisalento.pas.cityhallbe.dto.WarningDTO;
 import it.unisalento.pas.cityhallbe.services.IWarningService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 /**
  * Questa classe è un controller che gestisce le operazioni relative agli avvisi (warnings).
  */
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/warning")
 public class WarningController {
@@ -29,6 +31,7 @@ public class WarningController {
      * @return Una risposta JSON che indica se la creazione dell'avviso è avvenuta con successo o meno.
      */
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createWarning(@RequestBody WarningDTO warningDTO) {
         Warning warning = fromWarningDTOtoWarning(warningDTO);
 
@@ -46,6 +49,7 @@ public class WarningController {
      * @return Una risposta JSON che indica se l'eliminazione dell'avviso è avvenuta con successo o meno.
      */
     @DeleteMapping("/delete/{warningId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<String> deleteWarning(@PathVariable String warningId) {
         if (warningService.deleteWarning(warningId) == 0) {
             return ResponseEntity.ok("{\"message\": \"Warning deleted\"}");
@@ -61,6 +65,7 @@ public class WarningController {
      * @return Una risposta JSON contenente una lista di avvisi (warnings) o uno stato 500 se si verifica un errore.
      */
     @GetMapping("/get/user/{userId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ArrayList<WarningDTO>> getAllUserWarning(@PathVariable String userId) {
         ArrayList<WarningDTO> warningListDTO = new ArrayList<>();
         ArrayList<Warning> warningList = warningService.getAllByUser(userId);

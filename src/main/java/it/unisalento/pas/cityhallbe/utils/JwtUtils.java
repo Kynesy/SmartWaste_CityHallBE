@@ -31,36 +31,19 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
-    public String getUserNameFromJwtToken(String token) throws JsonProcessingException {
-        String[] chunks = token.split("\\.");
-        Claims claims = getClaims(new String(Decoders.BASE64URL.decode(chunks[1])));
-        return claims.get("sub", String.class);
+    public String getUserNameFromJwtToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key()).build()
+                .parseClaimsJws(token).getBody().getSubject();
     }
 
-    public String getUserRoleFromJwtToken(String token) throws JsonProcessingException {
-        String[] chunks = token.split("\\.");
-        Claims claims = getClaims(new String(Decoders.BASE64URL.decode(chunks[1])));
-        return claims.get("role", String.class);
-    }
-
-    public Claims getClaims(String payload) throws JsonProcessingException {
-        Map<String, Object> mapping = new ObjectMapper().readValue(payload, HashMap.class);
-        Claims claims = Jwts.claims(mapping);
-        return claims;
+    public String getRoleFromJwtToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key()).build()
+                .parseClaimsJws(token).getBody().get("role", String.class);
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            String[] chunks = authToken.split("\\.");
-
-            if(chunks.length != 3) throw new MalformedJwtException(null);
-
-            String header = new String(Decoders.BASE64URL.decode(chunks[0]));
-            String payload = new String(Decoders.BASE64URL.decode(chunks[1]));
-            String signature = chunks[2];
-
-            System.out.println(payload);
-
+            Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
@@ -73,10 +56,6 @@ public class JwtUtils {
         }
 
         return false;
-    }
-
-    private boolean isSignatureValid(String tokenSignature, Key key){
-        return true;
     }
 }
 

@@ -6,6 +6,7 @@ import it.unisalento.pas.cityhallbe.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 /**
  * Questa classe è un controller che gestisce le operazioni relative agli utenti.
  */
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -31,6 +33,7 @@ public class UserController {
      * @return Una risposta JSON con lo stato dell'utente.
      */
     @GetMapping("/exist/{userID}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Boolean> existUser(@PathVariable String userID) {
         if (userService.existUser(userID) == 1) {
             return ResponseEntity.status(HttpStatus.OK).body(true);
@@ -46,6 +49,7 @@ public class UserController {
      * @return Una risposta JSON che indica se la creazione dell'utente è avvenuta con successo o meno.
      */
     @PostMapping("/create")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO) {
         User user = fromUserDTOtoUser(userDTO);
 
@@ -64,6 +68,7 @@ public class UserController {
      * @return Una risposta JSON che indica se l'aggiornamento dell'utente è avvenuto con successo o meno.
      */
     @PostMapping("/update")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<String> updateUser(@RequestBody UserDTO userDTO) {
         User user = fromUserDTOtoUser(userDTO);
         int result = userService.updateUser(user);
@@ -81,6 +86,7 @@ public class UserController {
      * @return Una risposta JSON che indica se l'eliminazione dell'utente è avvenuta con successo o meno.
      */
     @DeleteMapping("/delete/{userID}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<String> deleteUser(@PathVariable String userID) {
         int result = userService.deleteUser(userID);
         if (result == 1) {
@@ -97,6 +103,7 @@ public class UserController {
      * @return Una risposta JSON contenente i dati dell'utente o uno stato 404 se l'utente non è stato trovato.
      */
     @GetMapping("/get/{userID}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable String userID) {
         User user = userService.findByID(userID);
 
@@ -114,6 +121,7 @@ public class UserController {
      * @return Una risposta JSON contenente una lista di ID utente o uno stato 404 se la lista è vuota.
      */
     @GetMapping("/id/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ArrayList<String>> getAllId() {
         return ResponseEntity.ok(new ArrayList<>(userService.getAllIdList()));
     }
