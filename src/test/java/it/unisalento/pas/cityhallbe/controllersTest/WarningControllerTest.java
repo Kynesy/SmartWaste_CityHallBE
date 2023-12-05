@@ -41,7 +41,7 @@ public class WarningControllerTest {
         mockMvc.perform(post("/api/warning/create")
                         .contentType("application/json")
                         .content(json)
-                        .with(user("admin").authorities(new SimpleGrantedAuthority("ADMIN"))))
+                        .with(user("admin").authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"message\": \"Warning created\"}"));
     }
@@ -58,7 +58,7 @@ public class WarningControllerTest {
         mockMvc.perform(post("/api/warning/create")
                         .contentType("application/json")
                         .content(json)
-                        .with(user("admin").authorities(new SimpleGrantedAuthority("ADMIN"))))
+                        .with(user("admin").authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -68,7 +68,7 @@ public class WarningControllerTest {
         when(warningService.deleteWarning(warningID)).thenReturn(0);
 
         mockMvc.perform(delete("/api/warning/delete/{warningID}", warningID)
-                        .with(user("user").authorities(new SimpleGrantedAuthority("USER"))))
+                        .with(user("user").authorities(new SimpleGrantedAuthority("ROLE_USER"))))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"message\": \"Warning deleted\"}"));
     }
@@ -79,7 +79,7 @@ public class WarningControllerTest {
         when(warningService.deleteWarning(warningID)).thenReturn(1);
 
         mockMvc.perform(delete("/api/warning/delete/{warningID}", warningID)
-                        .with(user("admin").authorities(new SimpleGrantedAuthority("ADMIN"))))
+                        .with(user("admin").authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -96,7 +96,7 @@ public class WarningControllerTest {
         when(warningService.getAllByUser(userID)).thenReturn(warningList);
 
         mockMvc.perform(get("/api/warning/get/user/{userID}", userID)
-                        .with(user("user").authorities(new SimpleGrantedAuthority("USER"))))
+                        .with(user("user").authorities(new SimpleGrantedAuthority("ROLE_USER"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("1"))
                 .andExpect(jsonPath("$[0].userId").value(userID))
