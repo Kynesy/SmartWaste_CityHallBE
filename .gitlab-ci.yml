@@ -24,7 +24,7 @@ deploy_procedure:
   script:
     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu@$SSH_IP "
       cd /home/ubuntu/CityHallBE/ &&
-      git pull origin &&
+      sudo git pull origin &&
       sudo docker compose down &&
       sudo docker compose build --no-cache &&
       sudo docker compose up -d"
