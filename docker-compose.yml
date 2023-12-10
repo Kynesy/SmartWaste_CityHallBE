@@ -5,7 +5,7 @@ services:
     image: openjdk:17-jdk-alpine
     container_name: cityHallBE
     ports:
-      - "8080:8080"
+      - "80:8080"
       - "8000:8000"
     expose:
       - "8000"
