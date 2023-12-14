@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,7 +117,10 @@ public class UserService implements IUserService {
         List<User> userList = userRepository.findAll();
         List<String> idList = new ArrayList<>();
 
-        for (User user : userList) {
+        Iterator<User> iterator = userList.iterator();
+
+        while(iterator.hasNext()){
+            User user = iterator.next();
             idList.add(user.getId());
         }
 
