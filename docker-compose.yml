@@ -23,6 +23,8 @@ services:
     container_name: cityHallDB
     ports:
       - "27017:27017"
+    volumes:
+      - ./mongodb_data:/data/db
     networks:
       - cityHallNetwork
 
